@@ -46,4 +46,19 @@ contract("ZToken", function (accounts) {
         );
       });
   });
+  it("transfer token ownship", function () {
+    return ZToken.deployed()
+      .then(function (instance) {
+        tokenInstance = instance;
+        // test 'require' statement first by transferring somethin larger than the sender's balance
+        return tokenInstance.transfer.call(accounts[1], 9999999);
+      })
+      .then(assert.fail)
+      .catch(function (error) {
+        assert(
+          error.message.indexOf("revert") >= 0,
+          "error message must contain revert"
+        );
+      });
+  });
 });
